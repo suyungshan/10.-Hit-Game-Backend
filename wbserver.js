@@ -29,6 +29,8 @@ server.on("request", async (req, res) => {
 });
 
 server.on("listening", async () => {
+  console.log("web connect"); // 在這裡輸出 "web connect"
+
   for (const { req, res } of requestQueue) {
     try {
       await corsMiddlewareWrapper(req, res);
@@ -58,14 +60,10 @@ server.listen(PORT, () => {
   console.log(`WebSocket server is listening on port ${PORT}`);
 });
 
-server.listen("https://10-hit-game-backend.vercel.app/", () => {
-  console.log(
-    `WebSocket server is listening on port https://10-hit-game-backend.vercel.app/`
-  );
-});
-
 io.on("connection", (socket) => {
+  console.log("websocket connect"); // 在這裡輸出 "websocket connect"
   console.log("A user connected");
+
   socket.on("sendMessage", () => {
     io.emit("allMessage", "hollow");
   });
