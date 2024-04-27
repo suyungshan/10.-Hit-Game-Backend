@@ -9,11 +9,8 @@ const PORT = process.env.PORT || 3001;
 const corsOptions = {
   origin: ["*"],
   methods: ["GET", "POST"],
-  allowedHeaders: [
-    "Content-Type",
-    "Authorization",
-    "Access-Control-Allow-Origin'",
-  ],
+  allowedHeaders: ["Content-Type", "Authorization", "my-custom-header"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
