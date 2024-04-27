@@ -21,7 +21,9 @@ const io = new Server(server, {
   cors: corsOptions,
 });
 
-server.listen(3000);
+server.listen(PORT, () => {
+  console.log(`WebSocket server is listening on port ${PORT}`);
+});
 
 const messageData = [];
 
@@ -45,8 +47,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
-});
-
-server.listen(PORT, () => {
-  console.log(`WebSocket server is listening on port ${PORT}`);
 });
