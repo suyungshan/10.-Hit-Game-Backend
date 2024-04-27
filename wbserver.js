@@ -5,7 +5,6 @@ import cors from "cors";
 
 const app = express();
 const server = createServer(app);
-let isWebSocketConnected = false;
 const PORT = process.env.PORT || 3001;
 const corsOptions = {
   origin: ["*"],
@@ -17,11 +16,6 @@ app.use(cors(corsOptions));
 
 app.get("/", (req, res) => {
   res.send("Web server is running!");
-  if (isWebSocketConnected) {
-    res.send("WebSocket 服务器已连接！");
-  } else {
-    res.send("Web 服务器正在运行！");
-  }
 });
 
 const io = new Server(server, {
@@ -31,7 +25,6 @@ const io = new Server(server, {
 const messageData = [];
 
 io.on("connection", (socket) => {
-  isWebSocketConnected = true;
   console.log("A user connected");
 
   socket.on("sendMessage", () => {
@@ -49,7 +42,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("disconnect", () => {
-    isWebSocketConnected = false;
     console.log("User disconnected");
   });
 });
