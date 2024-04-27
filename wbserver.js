@@ -1,7 +1,5 @@
-import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import cors from "cors";
 
 // const app = express();
 const server = createServer();
@@ -12,8 +10,7 @@ const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
-      "https://10-hit-game-backend.vercel.app/",
-      "https://10-hit-game-backend.vercel.app/socket.io/",
+      /^https:\/\/10-hit-game-backend\.vercel\.app\/$/,
     ],
     methods: ["GET", "POST"],
   },
