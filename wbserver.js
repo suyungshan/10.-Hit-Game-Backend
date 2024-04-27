@@ -3,32 +3,24 @@ import { createServer } from "http";
 import { Server } from "socket.io";
 import cors from "cors";
 
-const app = express();
-const server = createServer(app);
+// const app = express();
+const server = createServer();
 
-app.use(
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "https://10-hit-game-backend.vercel.app/",
-    ],
-  })
-);
-
+const messageData = [];
+const PORT = process.env.PORT || 3001;
 const io = new Server(server, {
   cors: {
     origin: [
       "http://localhost:3000",
       "https://10-hit-game-backend.vercel.app/",
+      "https://10-hit-game-backend.vercel.app/socket.io/",
     ],
     methods: ["GET", "POST"],
   },
 });
 
-const messageData = [];
-
-app.get("/", (req, res) => {
-  res.send("WebSocket server is running!");
+server.listen(PORT, () => {
+  console.log(`WebSocket server is listening on port ${PORT}`);
 });
 
 io.on("connection", (socket) => {
@@ -51,10 +43,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
-});
-
-const PORT = process.env.PORT || 3001;
-
-server.listen(PORT, () => {
-  console.log(`WebSocket server is listening on port ${PORT}`);
 });
