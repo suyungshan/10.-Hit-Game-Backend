@@ -23,11 +23,6 @@ app.get("/", (req, res) => {
   res.send("WebSocket server is running!");
 });
 
-// 添加這一行
-app.use("/socket.io", (req, res) => {
-  res.sendStatus(404);
-});
-
 io.on("connection", (socket) => {
   console.log("A user connected");
   socket.on("sendMessage", () => {
