@@ -5,11 +5,9 @@ import cors from "cors";
 
 const app = express();
 const server = createServer(app);
+const PORT = process.env.PORT || 3001;
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    /^https:\/\/10-hit-game-backend\.vercel\.app\//,
-  ],
+  origin: ["http://localhost:3000", "https://10-hit-game-backend.vercel.app/"],
   methods: ["GET", "POST"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
@@ -47,8 +45,6 @@ io.on("connection", (socket) => {
     console.log("User disconnected");
   });
 });
-
-const PORT = process.env.PORT || 3001;
 
 server.listen(PORT, () => {
   console.log(`WebSocket server is listening on port ${PORT}`);
