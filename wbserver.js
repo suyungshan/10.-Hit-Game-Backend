@@ -6,6 +6,7 @@ import cors from "cors";
 const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT || 3001;
+
 const corsOptions = {
   origin: ["http://localhost:3000", "https://10-hit-game-backend.vercel.app/"],
   methods: ["GET", "POST"],
@@ -13,6 +14,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// 添加這一行
+app.use((req, res) => res.sendStatus(404));
 
 app.get("/", (req, res) => {
   res.send("WebSocket server is running!");
@@ -22,25 +26,25 @@ const io = new Server(server, {
   cors: corsOptions,
 });
 
+// 添加這一行
+app.use("/socket.io", (req, res) => {
+  res.sendStatus(404);
+});
+
 const messageData = [];
 
 io.on("connection", (socket) => {
   console.log("A user connected");
-
   socket.on("sendMessage", () => {
     io.emit("allMessage", "hollow");
   });
-
   socket.on("Start", () => {
     io.emit("redirectToGame");
   });
-
   socket.on("hit", (data) => {
-    // Add the received data to the messageData array
     messageData.push(data);
     io.emit("allMessage", messageData);
   });
-
   socket.on("disconnect", () => {
     console.log("User disconnected");
   });
