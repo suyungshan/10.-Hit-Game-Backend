@@ -14,7 +14,10 @@ app.use(
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: [
+      "http://localhost:3000",
+      "https://10-hit-game-backend.vercel.app/",
+    ],
     methods: ["GET", "POST"],
   },
 });
