@@ -7,7 +7,7 @@ const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT || 3001;
 const corsOptions = {
-  origin: ["http://localhost:3000"],
+  origin: ["http://localhost:3000", "https://gameplay.zeabur.app/"],
   methods: ["GET", "POST"],
 };
 
