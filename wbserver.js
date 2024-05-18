@@ -7,7 +7,7 @@ const app = express();
 const server = createServer(app);
 const PORT = process.env.PORT || 3001;
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://gameplay.zeabur.app/"],
+  origin: "*",
   methods: ["GET", "POST"],
 };
 
@@ -20,6 +20,16 @@ app.get("/", (req, res) => {
 const io = new Server(server, {
   path: "/socket.io/",
   cors: corsOptions,
+  allowRequest: (req, callback) => {
+    const origin = req.headers.origin;
+    if (origin === "https://gameplay.zeabur.app") {
+      // 允許請求
+      callback(null, true);
+    } else {
+      // 拒絕請求
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
 });
 
 server.listen(PORT, () => {
