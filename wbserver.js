@@ -22,7 +22,8 @@ const io = new Server(server, {
   cors: corsOptions,
   allowRequest: (req, callback) => {
     const origin = req.headers.origin;
-    if (origin === "https://gameplay.zeabur.app") {
+    // if (origin === "https://gameplay.zeabur.app") {
+    if (origin === "http://localhost:3000") {
       // 允許請求
       callback(null, true);
     } else {
@@ -43,6 +44,14 @@ io.on("connection", (socket) => {
 
   socket.on("sendMessage", () => {
     io.emit("allMessage", "hollow");
+  });
+
+  socket.on("firstConnect", () => {
+    io.emit("allMessage", messageData);
+  });
+
+  socket.on("firstNameConnect", () => {
+    io.emit("allName", messageData);
   });
 
   socket.on("Start", () => {
