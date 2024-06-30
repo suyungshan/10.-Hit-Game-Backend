@@ -22,7 +22,10 @@ const io = new Server(server, {
   cors: corsOptions,
   allowRequest: (req, callback) => {
     const origin = req.headers.origin;
-    if (origin === "http://localhost:3000") {
+    if (
+      origin === "http://localhost:3000" ||
+      origin === "https://gameplay.zeabur.app/"
+    ) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
