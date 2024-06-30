@@ -24,7 +24,8 @@ const io = new Server(server, {
     const origin = req.headers.origin;
     if (
       origin === "http://localhost:3000" ||
-      origin === "https://gameplay.zeabur.app/"
+      origin === "https://gameplay.zeabur.app/" ||
+      origin === "https://one0-hit-game-backend.onrender.com"
     ) {
       callback(null, true);
     } else {
