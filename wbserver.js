@@ -9,6 +9,7 @@ const PORT = process.env.PORT || 3001;
 const corsOptions = {
   origin: "*",
   methods: ["GET", "POST"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
@@ -20,18 +21,6 @@ app.get("/", (req, res) => {
 const io = new Server(server, {
   path: "/socket.io/",
   cors: corsOptions,
-  allowRequest: (req, callback) => {
-    const origin = req.headers.origin;
-    if (
-      origin === "http://localhost:3000" ||
-      origin === "https://gameplay.zeabur.app/" ||
-      origin === "https://one0-hit-game-backend.onrender.com"
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
 });
 
 server.listen(PORT, () => {
