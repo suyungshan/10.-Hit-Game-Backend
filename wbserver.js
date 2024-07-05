@@ -29,10 +29,27 @@ server.listen(PORT, () => {
 
 const messageData = [];
 const MAX_CONNECTIONS = 10;
+const MAX_MESSAGE_DATA = 300;
 let activeConnections = new Set();
+
+function checkMessageDataLength() {
+  console.log(`目前 messageData 共有 ${messageData.length} 筆數據`);
+  if (messageData.length >= MAX_MESSAGE_DATA) {
+    console.log("messageData 已達到 300 筆數據");
+    return true;
+  }
+  return false;
+}
 
 io.on("connection", (socket) => {
   console.log("A user connected");
+
+  if (messageData.length >= MAX_MESSAGE_DATA) {
+    console.log("messageData 已滿，拒絕新連接");
+    socket.emit("maxDataReached");
+    socket.disconnect(true);
+    return;
+  }
 
   if (activeConnections.size < MAX_CONNECTIONS) {
     activeConnections.add(socket.id);
@@ -51,37 +68,48 @@ io.on("connection", (socket) => {
     });
 
     socket.on("enterName", (data) => {
-      // Check if messageData already contains an object with the same name
+      if (checkMessageDataLength()) {
+        socket.emit("maxDataReached");
+        return;
+      }
+
       const existingIndex = messageData.findIndex(
         (item) => item.name === data.name
       );
 
       if (existingIndex !== -1) {
-        // If an object with the same name exists, send a warning message back to the client
         socket.emit("warning", "A user with this name already exists.");
-        return; // Exit the function early
+        return;
       } else {
-        // If not, add the new object to messageData
         messageData.push(data);
         io.emit("allName", messageData);
+        if (checkMessageDataLength()) {
+          io.emit("maxDataReached");
+        }
       }
     });
 
     socket.on("hit", (data) => {
-      // 檢查 messageData 中是否已經存在相同 name 的物件
+      if (checkMessageDataLength()) {
+        socket.emit("maxDataReached");
+        return;
+      }
+
       const existingIndex = messageData.findIndex(
         (item) => item.name === data.name
       );
 
       if (existingIndex !== -1) {
-        // 如果存在，則覆蓋該物件
         messageData[existingIndex] = data;
       } else {
-        // 如果不存在，則添加新的物件
         messageData.push(data);
       }
       io.emit("allMessage", messageData);
+      if (checkMessageDataLength()) {
+        io.emit("maxDataReached");
+      }
     });
+
     socket.on("disconnect", () => {
       activeConnections.delete(socket.id);
       console.log(
@@ -90,11 +118,11 @@ io.on("connection", (socket) => {
     });
   } else {
     console.log("達到最大連接數，拒絕新連接");
+    socket.emit("maxConnectionsReached");
     socket.disconnect(true);
   }
 });
 
-// 定期清理斷開的連接
 setInterval(() => {
   io.sockets.sockets.forEach((socket) => {
     if (!socket.connected) {
@@ -102,4 +130,4 @@ setInterval(() => {
     }
   });
   console.log(`清理後的活躍連接數: ${activeConnections.size}`);
-}, 30000); // 每
+}, 30000);
