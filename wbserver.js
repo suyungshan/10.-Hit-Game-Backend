@@ -28,8 +28,8 @@ server.listen(PORT, () => {
 });
 
 const messageData = [];
-const MAX_CONNECTIONS = 10;
-const MAX_MESSAGE_DATA = 300;
+const MAX_CONNECTIONS = 400;
+const MAX_MESSAGE_DATA = 400;
 let activeConnections = new Set();
 
 function checkMessageDataLength() {
