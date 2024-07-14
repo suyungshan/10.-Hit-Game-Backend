@@ -123,11 +123,11 @@ io.on("connection", (socket) => {
   }
 });
 
-setInterval(() => {
-  io.sockets.sockets.forEach((socket) => {
-    if (!socket.connected) {
-      activeConnections.delete(socket.id);
-    }
-  });
-  console.log(`清理後的活躍連接數: ${activeConnections.size}`);
-}, 30000);
+// setInterval(() => {
+//   io.sockets.sockets.forEach((socket) => {
+//     if (!socket.connected) {
+//       activeConnections.delete(socket.id);
+//     }
+//   });
+//   console.log(`清理後的活躍連接數: ${activeConnections.size}`);
+// }, 30000);
