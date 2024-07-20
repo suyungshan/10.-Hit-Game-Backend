@@ -36,7 +36,6 @@ function checkMessageDataLength() {
   console.log(`目前 messageData 共有 ${messageData.length} 筆數據`);
   if (messageData.length >= MAX_MESSAGE_DATA) {
     console.log("messageData 已達到 300 筆數據");
-    console.log("");
     return true;
   }
   return false;
